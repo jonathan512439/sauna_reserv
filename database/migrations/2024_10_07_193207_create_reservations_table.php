@@ -17,8 +17,10 @@ return new class extends Migration
             $table->foreignId('ambiente_id')->constrained()->onDelete('cascade');
             $table->dateTime('start_time');
             $table->dateTime('end_time');
-            $table->enum('status', ['active', 'completed', 'cancelled'])->default('active');
+            $table->enum('status', ['pending', 'active', 'completed', 'cancelled'])->default('pending');
+            $table->text('comments')->nullable(); // Campo opcional para comentarios adicionales
             $table->timestamps();
+
         });
     }
 

@@ -8,9 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class Ambiente extends Model
 {
     use HasFactory;
-    public function reservations()
-{
-    return $this->hasMany(Reservation::class);
-}
 
+    // Aquí está el array de $fillable correctamente definido
+    protected $fillable = [
+        'name',
+        'capacity',
+        'description',
+        'available_from',
+        'available_until',
+        'is_active', // Si existe en la base de datos
+    ];
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
 }

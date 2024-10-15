@@ -2,6 +2,11 @@
 
 return [
 
+    'aliases' => [
+    // otros alias...
+    'Auth' => Illuminate\Support\Facades\Auth::class,
+],
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -65,7 +70,8 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
+    'timezone' => 'America/La_Paz', // O la zona horaria que prefieras
+
 
     /*
     |--------------------------------------------------------------------------

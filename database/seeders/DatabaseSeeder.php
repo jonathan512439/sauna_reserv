@@ -11,13 +11,15 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
-    {
-        // User::factory(10)->create();
+    public function run()
+{
+    \App\Models\Reservation::create([
+        'user_id' => 1, // Asume que este ID pertenece a un usuario existente
+        'ambiente_id' => 1, // Asume que este ambiente existe
+        'start_time' => now(),
+        'end_time' => now()->addHour(),
+        'status' => 'active',
+    ]);
+}
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-    }
 }

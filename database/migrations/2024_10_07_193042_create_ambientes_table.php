@@ -18,6 +18,7 @@ return new class extends Migration
             $table->time('available_from');
             $table->time('available_until');
             $table->timestamps();
+            $table->is_active();
         });
     }
 

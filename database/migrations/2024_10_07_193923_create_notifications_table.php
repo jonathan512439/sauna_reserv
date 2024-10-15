@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('type');
-            $table->text('data');
-            $table->timestamp('read_at')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('notifications')) {
+            Schema::create('notifications', function (Blueprint $table) {
+                $table->uuid('id')->primary();
+                $table->foreignId('notifiable_id')->index(); // El ID del usuario que recibe la notificación
+                $table->string('notifiable_type');           // Generalmente, "App\Models\User"
+                $table->string('type');                      // La clase de notificación (e.g., 'App\Notifications\ReservationConfirmation')
+                $table->text('data');                        // Los datos de la notificación (en formato JSON)
+                $table->timestamp('read_at')->nullable();    // Si ha sido leída
+                $table->timestamps();
+            });
+        }
     }
 
     /**
