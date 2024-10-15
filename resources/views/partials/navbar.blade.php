@@ -4,30 +4,25 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Usamos ms-auto para mover los paneles de Admin y Encargado a la derecha -->
+        <!-- Mover paneles de Admin y Encargado a la derecha -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 @if(Auth::check() && Auth::user()->role === 'admin')
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.dashboard') }}">Panel Admin</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.users') }}">Gestión de Usuarios</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.ambientes') }}">Gestión de Ambientes</a>
+                    <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                        <i class="bi bi-person-badge-fill"></i> Panel Admin
+                    </a>
                 </li>
                 @elseif(Auth::check() && Auth::user()->role === 'encargado')
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('encargado.dashboard') }}">Panel Encargado</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('ambientes.index') }}">Administrar Ambientes</a>
+                    <a class="nav-link" href="{{ route('encargado.dashboard') }}">
+                        <i class="bi bi-person-workspace"></i> Panel Encargado
+                    </a>
                 </li>
                 @endif
             </ul>
 
-            <!-- Menú del Usuario a la derecha (Login o Registro) -->
+            <!-- Menú del Usuario -->
             <ul class="navbar-nav ms-auto">
                 @if(Auth::check())
                 <li class="nav-item dropdown">
@@ -38,24 +33,56 @@
                         <li>
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
-                                <button type="submit" class="dropdown-item">Cerrar sesión</button>
+                                <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</button>
                             </form>
                         </li>
                     </ul>
                 </li>
                 @else
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('login') }}">Iniciar sesión</a>
+                    <a class="nav-link" href="{{ route('login') }}">
+                        <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('register') }}">Registrarse</a>
+                    <a class="nav-link" href="{{ route('register') }}">
+                        <i class="bi bi-person-plus-fill"></i> Registrarse
+                    </a>
                 </li>
                 @endif
             </ul>
         </div>
     </div>
 </nav>
+<!-- Modal para confirmación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar esta reserva?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <form id="deleteForm" method="POST" action="">
+          @csrf
+          @method('DELETE')
+          <button type="submit" class="btn btn-danger">Eliminar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
-<!-- Verificación de la correcta carga de Bootstrap JS y Popper.js -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Script para abrir el modal con el formulario correcto
+  function openDeleteModal(actionUrl) {
+    const form = document.getElementById('deleteForm');
+    form.action = actionUrl;
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+  }
+</script>
