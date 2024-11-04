@@ -78,4 +78,12 @@ class AdminController extends Controller
         // Pasar la variable $ambientes a la vista
         return view('admin.ambientes', compact('ambientes'));
     }
+    public function destroy(User $user)
+{
+    // Eliminar el usuario
+    $user->delete();
+
+    // Redirigir de vuelta con un mensaje de éxito
+    return back()->with('success', 'Usuario eliminado exitosamente.');
+}
 }

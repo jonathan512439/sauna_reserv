@@ -30,8 +30,11 @@ class Kernel extends ConsoleKernel
         // Ejecuta el envío de recordatorios cada minuto
         $schedule->call(function () {
             $reservationController = new ReservationController();
-            $reservationController->notifyUpcomingReservations(); // Llama al método que envía recordatorios
+            $reservationController->notifyUpcomingReservations();
+            app(\App\Http\Controllers\ReservationController::class)->updateExpiredReservations(); // Llama al método que envía recordatorios
         })->everyMinute();
+        $schedule->command('reservations:expire')->hourly();
+
     }
 
     /**

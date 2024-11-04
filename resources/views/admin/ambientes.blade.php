@@ -1,8 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
-    <h1 class="text-center mb-4">Gestión de Ambientes</h1>
+<div class="container mt-5"  style="margin-left: 60px">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center mb-4">Gestión de Ambientes</h1>
+        </div>
+    </div>
 
     @if(session('success'))
         <div class="alert alert-success text-center">
@@ -12,9 +16,7 @@
 
     <div class="row mb-4">
         <div class="col-md-12 text-center">
-            <a href="{{ route('ambientes.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Crear Nuevo Ambiente
-            </a>
+            <a href="{{ route('ambientes.create') }}" class="btn btn-primary">Crear Nuevo Ambiente</a>
         </div>
     </div>
 
@@ -23,7 +25,7 @@
             @if($ambientes->isEmpty())
                 <p class="text-center">No hay ambientes disponibles.</p>
             @else
-                <table class="table table-dark table-hover table-striped">
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>Nombre</th>
@@ -31,6 +33,7 @@
                             <th>Descripción</th>
                             <th>Disponible Desde</th>
                             <th>Disponible Hasta</th>
+                            <th>Precio</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -42,18 +45,27 @@
                                 <td>{{ $ambiente->description }}</td>
                                 <td>{{ $ambiente->available_from }}</td>
                                 <td>{{ $ambiente->available_until }}</td>
+                                <td>{{ $ambiente->price }}</td>
                                 <td>
-                                    <a href="{{ route('ambientes.edit', $ambiente->id) }}" class="btn btn-warning btn-sm">
-                                        <i class="bi bi-pencil-square"></i> Editar
-                                    </a>
+                                    <div class="card" style="width: 18rem;">
+                                        @if($ambiente->image_path)
+                                            <img src="{{ asset('storage/' . $ambiente->image_path) }}" class="card-img-top" alt="Imagen del ambiente">
+                                        @else
+                                            <img src="{{ asset('images/default_image.jpg') }}" class="card-img-top" alt="Imagen por defecto">
+                                        @endif
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ $ambiente->name }}</h5>
+                                            <p class="card-text">{{ $ambiente->description }}</p>
+                                        </div>
+                                    </div>
+                                    <a href="{{ route('ambientes.edit', $ambiente->id) }}" class="btn btn-warning btn-sm">Editar</a>
 
+                                    <!-- Formulario con ventana emergente para eliminar -->
                                     <form action="{{ route('ambientes.destroy', $ambiente->id) }}" method="POST" class="d-inline"
                                           onsubmit="return confirm('¿Estás seguro de que deseas eliminar este ambiente?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="bi bi-trash"></i> Eliminar
-                                        </button>
+                                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                                     </form>
                                 </td>
                             </tr>

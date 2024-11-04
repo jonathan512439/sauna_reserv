@@ -16,7 +16,9 @@ class Ambiente extends Model
         'description',
         'available_from',
         'available_until',
-        'is_active', // Si existe en la base de datos
+        'is_active',
+        'image_path',
+        'price',
     ];
 
     public function reservations()

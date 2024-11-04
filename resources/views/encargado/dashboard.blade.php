@@ -27,7 +27,7 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text">Consulta las reservas realizadas por los usuarios.</p>
-                    <a href="{{ route('reservations.index') }}" class="btn btn-primary">Ver Reservas</a>
+                    <a href="{{ route('reservations.pending') }}" class="btn btn-primary">Ver Reservas</a>
                 </div>
             </div>
         </div>

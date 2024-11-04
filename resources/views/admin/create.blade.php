@@ -1,56 +1,77 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
-    <h1>Crear Nuevo Ambiente</h1>
-
-    {{-- Ventana de errores --}}
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+<div class="container mt-5" style="margin-left: 100px">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center mb-4">Gestión de Ambientes</h1>
         </div>
-    @endif
+    </div>
 
-    {{-- Ventana de éxito (si es necesario) --}}
     @if(session('success'))
-        <div class="alert alert-success">
+        <div class="alert alert-success text-center">
             {{ session('success') }}
         </div>
     @endif
 
-    <form action="{{ route('ambientes.store') }}" method="POST">
-        @csrf
-
-        <div class="form-group">
-            <label for="name">Nombre</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
+    <div class="row mb-4">
+        <div class="col-md-12 text-center">
+            <a href="{{ route('ambientes.create') }}" class="btn btn-primary">Crear Nuevo Ambiente</a>
         </div>
+    </div>
 
-        <div class="form-group mt-3">
-            <label for="capacity">Capacidad</label>
-            <input type="number" class="form-control" id="capacity" name="capacity" value="{{ old('capacity') }}" min="1" required>
+    <div class="row">
+        <div class="col-md-12">
+            @if($ambientes->isEmpty())
+                <p class="text-center">No hay ambientes disponibles.</p>
+            @else
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Capacidad</th>
+                            <th>Descripción</th>
+                            <th>Disponible Desde</th>
+                            <th>Disponible Hasta</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($ambientes as $ambiente)
+                            <tr>
+                                <td>{{ $ambiente->name }}</td>
+                                <td>{{ $ambiente->capacity }}</td>
+                                <td>{{ $ambiente->description }}</td>
+                                <td>{{ $ambiente->available_from }}</td>
+                                <td>{{ $ambiente->available_until }}</td>
+                                <td>
+                                    <div class="card" style="width: 18rem;">
+                                        @if($ambiente->image_path)
+                                            <img src="{{ asset('storage/' . $ambiente->image_path) }}" class="card-img-top" alt="Imagen del ambiente">
+                                        @else
+                                            <img src="{{ asset('images/default_image.jpg') }}" class="card-img-top" alt="Imagen por defecto">
+                                        @endif
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ $ambiente->name }}</h5>
+                                            <p class="card-text">{{ $ambiente->description }}</p>
+                                        </div>
+                                    </div>
+                                    <a href="{{ route('ambientes.edit', $ambiente->id) }}" class="btn btn-warning btn-sm">Editar</a>
+
+                                    <!-- Formulario con ventana emergente para eliminar -->
+                                    <form action="{{ route('ambientes.destroy', $ambiente->id) }}" method="POST" class="d-inline"
+                                          onsubmit="return confirm('¿Estás seguro de que deseas eliminar este ambiente?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
         </div>
-
-        <div class="form-group mt-3">
-            <label for="available_from">Disponible Desde (HH:MM)</label>
-            <input type="time" class="form-control" id="available_from" name="available_from" value="{{ old('available_from') }}" required>
-        </div>
-
-        <div class="form-group mt-3">
-            <label for="available_until">Disponible Hasta (HH:MM)</label>
-            <input type="time" class="form-control" id="available_until" name="available_until" value="{{ old('available_until') }}" required>
-        </div>
-
-        <div class="form-group mt-3">
-            <label for="description">Descripción (Opcional)</label>
-            <textarea class="form-control" id="description" name="description" rows="3">{{ old('description') }}</textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary mt-4">Crear Ambiente</button>
-    </form>
+    </div>
 </div>
 @endsection

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
@@ -25,7 +26,7 @@ class ReservationConfirmation extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail']; // Asegúrate de incluir 'database' si estás usando notificaciones en la base de datos
+        return ['mail']; // Can include 'database' if you are storing notifications in the database as well
     }
 
     /**
@@ -34,14 +35,15 @@ class ReservationConfirmation extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Confirmación de Reserva')
-            ->line('Tu reserva ha sido confirmada.')
-            ->action('Ver Reserva', url('/reservas'))
-            ->line('Gracias por utilizar nuestro sistema!');
+            ->subject('Confirmación de Reserva - Sauna San Márquez')
+            ->view('emails.reservation_confirmation', [ // Custom view for email
+                'reservation' => $this->reservation,
+                'notifiable' => $notifiable
+            ]);
     }
 
     /**
-     * Almacenar notificación en la base de datos.
+     * Store notification in the database.
      */
     public function toArray($notifiable)
     {

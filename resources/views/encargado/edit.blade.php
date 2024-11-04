@@ -1,10 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
+<div class="container mt-5" style="margin-left: 4%">
     <h1>Editar Ambiente</h1>
-
-    <form action="{{ route('ambientes.update', $ambiente->id) }}" method="POST">
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+    <form action="{{ route('ambientes.update', $ambiente->id) }}" method="POST"  enctype="multipart/form-data">
         @csrf
         @method('PATCH')
 
@@ -37,6 +45,17 @@
             <!-- Campo en blanco al editar -->
             <textarea class="form-control" id="description" name="description" rows="3" placeholder="Agrega una descripción">{{ old('description') }}</textarea>
         </div>
+        <!-- Mostrar la imagen existente si hay -->
+    @if($ambiente->image_path)
+    <div class="form-group">
+      <img src="{{ asset('storage/' . $ambiente->image_path) }}" alt="Imagen del ambiente" style="max-width: 100px;">
+    </div>
+ @endif
+        <!-- Campo para subir una nueva imagen -->
+    <div class="form-group">
+      <label for="image">Cambiar imagen del ambiente</label>
+      <input type="file" class="form-control" name="image" id="image">
+    </div>
 
         <button type="submit" class="btn btn-primary mt-4">Actualizar Ambiente</button>
     </form>

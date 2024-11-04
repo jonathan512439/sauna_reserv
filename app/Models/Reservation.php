@@ -16,9 +16,15 @@ class Reservation extends Model
         'start_time',
         'end_time',
         'status',
+        'payment_method',
+        'payment_status',
+        'payment_amount',
     ];
 
-    public function user()
+
+   // App\Models\Reservation.php
+// App\Models\Reservation.php
+public function user()
 {
     return $this->belongsTo(User::class);
 }
